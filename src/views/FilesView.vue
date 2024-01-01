@@ -23,9 +23,9 @@
             <td>
               <input type="text" :value="item.path.replace(this.path, '')" @change="ev => renameItem(item.path, ev.target.value)">
             </td>
-            <td>{{ item.type === 'directory' ? '-' : item.size + ' Bytes' }}</td>
-            <td v-if="item.type !== 'directory'"><button @click="downloadItem(item.path)">Download</button></td>
+            <td>{{ item.type === 'directory' ? '-' : item.size}}</td>
             <td><button @click="deleteItem(item.path)">Delete</button></td>
+            <td v-if="item.type !== 'directory'"><button @click="downloadFile(item.path)">Download</button></td>
           </tr>
         </tbody>
       </table>
