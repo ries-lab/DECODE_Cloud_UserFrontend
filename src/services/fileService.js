@@ -24,5 +24,17 @@ export default {
     },
     async renameItem(path, newPath) {
         return await axios.put(`/files/${path}`, {"path": newPath});
-    }
+    },
+    async downloadFile(path) {
+        let resp = await axios.get(`/files/${path}/url`);
+        resp = await axios.get(`/files/${path}/download`, {
+            headers: resp['headers']
+        });
+        const url = window.URL.createObjectURL(new Blob([resp.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', path.split('/').pop());
+        document.body.appendChild(link);
+        link.click();
+    },
 };

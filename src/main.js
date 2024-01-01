@@ -9,7 +9,7 @@ import store from './store';
 const app = createApp(App);
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.API_URL || 'http://localhost:8000/';
+axios.defaults.baseURL = process.env.API_URL || 'https://dev.decodeapi.arthur-jaques.de/';
 
 axios.interceptors.response.use(undefined, function (error) {
     if (error) {

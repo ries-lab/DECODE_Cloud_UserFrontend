@@ -24,6 +24,7 @@
               <input type="text" :value="item.path.replace(this.path, '')" @change="ev => renameItem(item.path, ev.target.value)">
             </td>
             <td>{{ item.type === 'directory' ? '-' : item.size + ' Bytes' }}</td>
+            <td v-if="item.type !== 'directory'"><button @click="downloadItem(item.path)">Download</button></td>
             <td><button @click="deleteItem(item.path)">Delete</button></td>
           </tr>
         </tbody>
@@ -92,6 +93,9 @@ export default defineComponent({
         .catch(error => {
           console.error("Error uploading file:", error);
         });
+    },
+    downloadFile(path) {
+      fileService.downloadFile(path);
     },
     deleteItem(path) {
       fileService.deleteItem(path)
