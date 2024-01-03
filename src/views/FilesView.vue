@@ -25,7 +25,7 @@
             </td>
             <td>{{ item.type === 'directory' ? '-' : item.size}}</td>
             <td><button @click="deleteItem(item.path)">Delete</button></td>
-            <td v-if="item.type !== 'directory'"><button @click="downloadFile(item.path)">Download</button></td>
+            <td><button @click="downloadFile(item)">Download</button></td>
           </tr>
         </tbody>
       </table>
