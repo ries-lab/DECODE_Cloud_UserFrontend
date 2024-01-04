@@ -4,9 +4,13 @@
     <header>
       <button @click="goUp" :disabled="path === ''">Back</button>
       <input type="text" v-model="path" placeholder="Path">
-      <button class="btn-flat" @click="createFolder">Add Folder</button>
+      <button class="btn-flat" @click="createFolder">Create Folder</button>
       <!-- File upload input -->
-      <input type="file" @change="handleFileUpload"/>
+      <button @click="uploadSingleFile">Upload File</button>
+      <button @click="uploadDirectory">Upload Directory</button>
+      <p v-if="uploadingFile">Uploading: {{ uploadingFile }}</p>
+      <input type="file" id="fileInput" @change="handleUpload" style="display: none">
+      <input type="file" id="directoryInput" webkitdirectory @change="handleUpload" style="display: none">
     </header>
     <main>
       <table>
@@ -25,7 +29,7 @@
             </td>
             <td>{{ item.type === 'directory' ? '-' : item.size}}</td>
             <td><button @click="deleteItem(item.path)">Delete</button></td>
-            <td><button @click="downloadFile(item)">Download</button></td>
+            <td><button @click="downloadItem(item)">Download</button></td>
           </tr>
         </tbody>
       </table>
@@ -44,6 +48,7 @@ export default defineComponent({
     return {
       path: '',
       files: [],
+      uploadingFile: null,
     };
   },
   methods: {
@@ -77,25 +82,35 @@ export default defineComponent({
           this.fetchFiles();
         });
     },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.uploadFile(file);
+    uploadSingleFile() {
+      document.getElementById('fileInput').click();
+    },
+    uploadDirectory() {
+      document.getElementById('directoryInput').click();
+    },
+    handleUpload(event) {
+      const files = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        this.uploadFile(file, this.path);
       }
     },
-    uploadFile(file) {
+    uploadFile(file, path) {
+      this.uploadingFile = file.name;
       let formData = new FormData();
       formData.append('file', file);
-      fileService.uploadFile(this.path, formData)
-        .then(() => {
-          this.fetchFiles();
-        })
-        .catch(error => {
-          console.error("Error uploading file:", error);
-        });
+      return fileService.uploadFile(path, formData)
+      .then(() => {
+        this.fetchFiles();
+        this.uploadingFile = null;
+      })
+      .catch(error => {
+        console.error("Error uploading file:", error);
+        this.uploadingFile = null;
+      });
     },
-    downloadFile(path) {
-      fileService.downloadFile(path);
+    downloadItem(item) {
+      fileService.downloadItem(item);
     },
     deleteItem(path) {
       fileService.deleteItem(path)

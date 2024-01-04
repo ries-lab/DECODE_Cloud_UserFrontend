@@ -27,7 +27,7 @@ export default {
         //         "ExposeHeaders": []
         //     }
         // ]
-        return await axios.post(`/files/${path}upload`, formData);
+        return await axios.post(`/files/${path}/upload`, formData);
     },
     async deleteItem(path) {
         return await axios.delete(`/files/${path}`);
@@ -35,7 +35,7 @@ export default {
     async renameItem(path, newPath) {
         return await axios.put(`/files/${path}`, {"path": newPath});
     },
-    async downloadFile(item) {
+    async downloadItem(item) {
         // TODO: do stuff via presigned url (see uploadFile)
         const path = item.path;
         if (item.type === 'directory') {
