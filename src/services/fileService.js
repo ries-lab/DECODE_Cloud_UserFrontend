@@ -10,24 +10,20 @@ export default {
         return await axios.post(`/files/${path}/`);
     },
     async uploadFile(path, formData) {
-        // TODO: do stuff via presigned url
-        // let resp = await axios.post(`/files/${path}url`)
-        // if ('data' in resp) {
-        //     for (let key in resp['data']) {
-        //         formData.append(key, resp['data'][key]);
-        //     }
-        // }
-        // return await axios.post(resp.url, formData, {headers: resp['headers']});
-        // This requires CORS rule on S3 bucket
-        // [
-        //     {
-        //         "AllowedHeaders": ["*"],
-        //         "AllowedMethods": ["GET", "PUT", "POST", "DELETE", "HEAD"],
-        //         "AllowedOrigins": ["url"],
-        //         "ExposeHeaders": []
-        //     }
-        // ]
-        return await axios.post(`/files/${path}/upload`, formData);
+        let resp = await axios.post(`/files/${path}url`)
+        let data = new FormData();
+        if ('key' in resp.data['data']) {
+            data.append('key', resp.data['data']['key']);
+        }
+        for (let key in resp.data['data']) {
+            if (key !== 'key') {
+                data.append(key, resp.data['data'][key]);
+            }
+        }
+        for (let pair of formData.entries()) {
+            data.append(pair[0], pair[1]);
+        }
+        return await axios.post(resp.data.url, data, {headers: resp.data.headers || {}});
     },
     async deleteItem(path) {
         return await axios.delete(`/files/${path}`);
@@ -35,14 +31,17 @@ export default {
     async renameItem(path, newPath) {
         return await axios.put(`/files/${path}`, {"path": newPath});
     },
+    async downloadFile(path) {
+        let resp = await axios.get(`/files/${path}/url`);
+        return await axios.get(resp.data.url, {headers: resp.data.headers || {}});
+    },
     async downloadItem(item) {
-        // TODO: do stuff via presigned url (see uploadFile)
         const path = item.path;
         if (item.type === 'directory') {
             let zip = new JSZip();
             let files = await axios.get(`/files/${path}`, {params: {show_dirs: false, recursive: true}});
             for (let file of files.data) {
-                let fileData = await axios.get(`/files/${file.path}/download`, { responseType: 'arraybuffer' });
+                let fileData = await this.downloadFile(file.path);
                 zip.file(file.path.replace(item.path, ''), fileData.data);
             }
             let content = await zip.generateAsync({type:"blob"});
@@ -55,7 +54,7 @@ export default {
             link.click();
         }
         else {
-            let resp = await axios.get(`/files/${path}/download`);
+            let resp = await this.downloadFile(path);
             const url = window.URL.createObjectURL(new Blob([resp.data]));
             const link = document.createElement('a');
             link.href = url;

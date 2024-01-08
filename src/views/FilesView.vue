@@ -10,7 +10,7 @@
       <button @click="uploadDirectory">Upload Directory</button>
       <p v-if="uploadingFile">Uploading: {{ uploadingFile }}</p>
       <input type="file" id="fileInput" @change="handleUpload" style="display: none">
-      <input type="file" id="directoryInput" webkitdirectory @change="handleUpload" style="display: none">
+      <input type="file" id="directoryInput" webkitdirectory multiple @change="handleUpload" style="display: none">
     </header>
     <main>
       <table>
@@ -92,7 +92,11 @@ export default defineComponent({
       const files = event.target.files;
       for (let i = 0; i < files.length; i++) {
         let file = files[i];
-        this.uploadFile(file, this.path);
+        let relativePath = file.webkitRelativePath || file.name;
+        let pathArray = relativePath.split('/');
+        pathArray.pop(); // Remove the file name
+        let folderPath = pathArray.join('/') + '/';
+        this.uploadFile(file, this.path + folderPath);
       }
     },
     uploadFile(file, path) {
