@@ -9,8 +9,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@aws-amplify/auth": "^6.0.12",
-    "aws-amplify": "^6.0.12",
+    "aws-amplify": "^5.3.15",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
     "bootstrap-vue-3": "^0.5.1",

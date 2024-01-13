@@ -10,7 +10,17 @@
 <script>
 // @ is an alias to /src
 import NavBar from '@/components/NavBar.vue'
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
+  setup() {
+    const store = useStore();
+    onMounted(() => {
+      store.dispatch('viewMe');
+      this.$router.push('/profile');
+    });
+  },
   components: {
     NavBar
   }

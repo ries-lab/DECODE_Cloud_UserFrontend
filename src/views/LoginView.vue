@@ -10,6 +10,7 @@
         <input type="password" name="password" v-model="form.password" class="form-control" />
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
+      <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     </form>
   </section>
 </template>
@@ -25,17 +26,19 @@ export default defineComponent({
       form: {
         username: '',
         password:'',
-      }
+      },
+      errorMessage: '',
     };
   },
   methods: {
     ...mapActions(['logIn']),
     async submit() {
-      const User = new FormData();
-      User.append('username', this.form.username);
-      User.append('password', this.form.password);
-      await this.logIn(User);
-      this.$router.push('/files');
+      try {
+        await this.logIn({'username': this.form.username, 'password': this.form.password});
+        this.$router.push('/profile');
+      } catch (error) {
+        this.errorMessage = error.response.data.detail;
+      }
     }
   }
 });

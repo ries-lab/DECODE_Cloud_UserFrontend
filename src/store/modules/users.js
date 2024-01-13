@@ -12,12 +12,11 @@ const getters = {
 
 const actions = {
   async logIn({dispatch}, user) {
-    Auth.signIn({
+    await Auth.signIn({
       username: user.username,
       password: user.password,
-    }).then(() => {
-      dispatch('viewMe');
-    });
+    })
+    dispatch('viewMe');
   },
   async viewMe({commit}) {
     let {data} = await axios.get('user');
