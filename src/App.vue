@@ -19,8 +19,12 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
-      store.dispatch('viewMe');
-      router.push('/profile');
+      store.dispatch('viewMe')
+        .then(() => {
+          if (store.state.user) {
+            router.push('/home');
+          }
+        });
     });
   },
   components: {
