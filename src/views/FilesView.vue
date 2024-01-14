@@ -35,6 +35,7 @@
       </table>
     </main>
   </div>
+  <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 </template>
 
 
@@ -49,6 +50,7 @@ export default defineComponent({
       path: '',
       files: [],
       uploadingFile: null,
+      errorMessage: '',
     };
   },
   methods: {
@@ -64,7 +66,7 @@ export default defineComponent({
           this.files = response.data;
         })
         .catch(error => {
-          console.error("Error fetching files:", error);
+          this.errorMessage = "Error fetching files: " + error.message;
         });
     },
     goUp() {
@@ -80,6 +82,9 @@ export default defineComponent({
       fileService.createFolder(this.path + 'new')
         .then(() => {
           this.fetchFiles();
+        })
+        .catch(error => {
+          this.errorMessage = "Error creating folder: " + error.message;
         });
     },
     uploadSingleFile() {
@@ -103,23 +108,29 @@ export default defineComponent({
       this.uploadingFile = file.name;
       let formData = new FormData();
       formData.append('file', file);
-      return fileService.uploadFile(path, formData)
+      fileService.uploadFile(path, formData)
       .then(() => {
         this.fetchFiles();
         this.uploadingFile = null;
       })
       .catch(error => {
-        console.error("Error uploading file:", error);
         this.uploadingFile = null;
+        this.errorMessage = "Error uploading: " + error.message;
       });
     },
     downloadItem(item) {
-      fileService.downloadItem(item);
+      fileService.downloadItem(item)
+        .catch(error => {
+          this.errorMessage = "Error downloading: " + error.message;
+        });
     },
     deleteItem(path) {
       fileService.deleteItem(path)
         .then(() => {
           this.fetchFiles();
+        })
+        .catch(error => {
+          this.errorMessage = "Error deleting: " + error.message;
         });
     },
     renameItem(path, newName) {
@@ -127,6 +138,9 @@ export default defineComponent({
       fileService.renameItem(path, newPath)
         .then(() => {
           this.fetchFiles();
+        })
+        .catch(error => {
+          this.errorMessage = "Error renaming: " + error.message;
         });
     },
   },
@@ -135,3 +149,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.error-message {
+  color: red;
+}
+</style>

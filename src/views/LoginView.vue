@@ -35,11 +35,19 @@ export default defineComponent({
     async submit() {
       try {
         await this.logIn({'username': this.form.username, 'password': this.form.password});
-        this.$router.push('/profile');
+        this.$router.push('/');
       } catch (error) {
-        this.errorMessage = error.response.data.detail;
+        console.log(error);
+        this.errorMessage = error;
       }
     }
   }
 });
 </script>
+
+<style>
+.error {
+  color: red;
+}
+</style>
+
