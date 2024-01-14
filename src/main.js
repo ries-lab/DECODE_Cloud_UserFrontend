@@ -28,20 +28,18 @@ async function initializeApp() {
         const token = session.getIdToken().getJwtToken();
         config.headers.Authorization = `Bearer ${token}`;
       } catch (error) {
-        store.dispatch('logOut').then(() => {
-          router.push('/login')
-        });
-      }
-      return config;
-    }, (error) => {
-      if (error.response.status === 401) {
-        store.dispatch('logOut').then(() => {
-          router.push('/login')
-        });
-      }
-      else {
+        await store.dispatch('logOut');
+        router.push('/login');
         return Promise.reject(error);
       }
+      return config;
+    }, async (error) => {
+      if (error.response && error.response.status === 401) {
+        await store.dispatch('logOut');
+        router.push('/login');
+        return Promise.reject(error);
+      }
+      return Promise.reject(error);
     });
 
     const app = createApp(App);
