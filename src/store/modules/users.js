@@ -25,7 +25,25 @@ const actions = {
   async logOut({commit}) {
     await Auth.signOut();
     await commit('logout', null);
-  }
+  },
+  async forgotPassword(_, username) {
+    await Auth.forgotPassword(username);
+  },
+  async forgotPasswordSubmit(_, user) {
+    await Auth.forgotPasswordSubmit(user.username, user.code, user.password);
+  },
+  async register(_, user) {
+    await Auth.signUp({
+      username: user.username,
+      password: user.password,
+      attributes: {
+        email: user.username,
+      },
+    });
+  },
+  async verify(_, user) {
+    await Auth.confirmSignUp(user.username, user.code);
+  },
 };
 
 const mutations = {

@@ -9,6 +9,9 @@
         <label for="password" class="form-label">Password:</label>
         <input type="password" name="password" v-model="form.password" class="form-control" />
       </div>
+      <div>
+        <router-link to="/forgot-password" class="btn btn-link">Forgot password?</router-link>
+      </div>
       <button type="submit" class="btn btn-primary">Submit</button>
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     </form>
@@ -37,8 +40,12 @@ export default defineComponent({
         await this.logIn({'username': this.form.username, 'password': this.form.password});
         this.$router.push('/');
       } catch (error) {
-        console.log(error);
-        this.errorMessage = error;
+        if (error.code === 'UserNotConfirmedException') {
+          this.$router.push({name: 'Register', params: {username: this.form.username, password: this.form.password, isEmailVerified: true}});
+        } else {
+          console.log(error);
+          this.errorMessage = error;
+        }
       }
     }
   }
@@ -50,4 +57,3 @@ export default defineComponent({
   color: red;
 }
 </style>
-
