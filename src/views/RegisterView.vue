@@ -42,6 +42,16 @@ export default defineComponent({
       isEmailVerified: false,
     };
   },
+  props: {
+    user: {
+      type: String,
+      default: '',
+    },
+    emailVerification: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     ...mapActions(['register', 'verify']),
     async submit() {
@@ -68,11 +78,10 @@ export default defineComponent({
     }
   },
   created() {
-    if (this.$route.params.isEmailVerified) {
+    console.log('Route Params:', JSON.stringify(this.$route.params));
+    if (this.$route.params.emailVerification) {
       this.isEmailVerified = true;
-      this.form.username = this.$route.params.username;
-      this.form.password = this.$route.params.password;
-      this.form.repeat_password = this.$route.params.password;
+      this.form.username = this.$route.params.user;
     }
   }
 });

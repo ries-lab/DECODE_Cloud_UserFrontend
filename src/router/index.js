@@ -20,6 +20,7 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: RegisterView,
+    props: true,
   },
   {
     path: '/login',
