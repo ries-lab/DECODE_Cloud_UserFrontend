@@ -3,28 +3,52 @@ import { createApp } from "vue";
 import axios from 'axios';
 
 import App from './App.vue';
+import { Amplify, Auth } from 'aws-amplify';
 import router from './router';
 import store from './store';
 
-const app = createApp(App);
+const API_URL = process.env.API_URL || 'https://dev.decodeapi.arthur-jaques.de';
+axios.defaults.baseURL = API_URL;
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.API_URL || 'https://dev.decodeapi.arthur-jaques.de';
-
-axios.interceptors.response.use(undefined, function (error) {
-    if (error) {
-      const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        store.dispatch('logOut');
-        return router.push('/login')
+async function initializeApp() {
+  try {
+    let response = await axios.get('/access_info');
+    let cognitoConfig = response.data.cognito;
+    Amplify.configure({
+      Auth: {
+        userPoolId: cognitoConfig.user_pool_id,
+        userPoolWebClientId: cognitoConfig.client_id,
+        region: cognitoConfig.region,
+        authenticationFlowType: 'USER_PASSWORD_AUTH'
       }
-      else {
+    });
+    axios.interceptors.request.use(async (config) => {
+      try {
+        const session = await Auth.currentSession();
+        const token = session.getIdToken().getJwtToken();
+        config.headers.Authorization = `Bearer ${token}`;
+      } catch (error) {
+        await store.dispatch('logOut');
+        router.push('/login');
         return Promise.reject(error);
       }
-    }
-  });
+      return config;
+    }, async (error) => {
+      if (error.response && error.response.status === 401) {
+        await store.dispatch('logOut');
+        router.push('/login');
+        return Promise.reject(error);
+      }
+      return Promise.reject(error);
+    });
 
-app.use(router);
-app.use(store);
-app.mount("#app");
+    const app = createApp(App);
+    app.use(router);
+    app.use(store);
+    app.mount("#app");
+  } catch (error) {
+    console.error("Error during app initialization:", error);
+  }
+}
+
+initializeApp();

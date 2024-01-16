@@ -8,9 +8,25 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import NavBar from '@/components/NavBar.vue'
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import NavBar from '@/components/NavBar.vue';
+
 export default {
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    onMounted(() => {
+      store.dispatch('viewMe')
+        .then(() => {
+          if (store.state.user) {
+            router.push('/home');
+          }
+        });
+    });
+  },
   components: {
     NavBar
   }

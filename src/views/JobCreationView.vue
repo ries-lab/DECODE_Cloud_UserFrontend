@@ -3,7 +3,6 @@
     <!-- Job Name and Application -->
     <div class="form-group">
         <h2>Submit New Job</h2>
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <div>
             <label class="form-label" for="jobName">Job Name</label>
             <input type="text" id="jobName" v-model="job.job_name" />
@@ -82,6 +81,7 @@
     <!-- Submit Button -->
     <button type="submit">Submit Job</button>
     </form>
+    <div v-if="errorMessage" v-html="errorMessage" class="error-message"></div>
 </template>
 
 <script>
@@ -164,7 +164,14 @@
                         this.$router.push('/jobs');
                     })
                     .catch(error => {
-                        this.errorMessage = error.response.data.detail;
+                        if (error.response.status === 422) {
+                            this.errorMessage = 'Error(s) in job definition:' + error.response.data.detail.map(err => {
+                                const loc = err.loc.filter(part => part !== 'body').join('.');
+                                return `<br> - ${loc}: ${err.msg}`;
+                                }).join('');
+                        } else {
+                            this.errorMessage = error.response.data.detail;
+                        }
                     });
             },
         },

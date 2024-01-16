@@ -1,4 +1,6 @@
 import axios from 'axios';
+import router from '@/router';
+import { Auth } from '@aws-amplify/auth';
 
 const state = {
   user: null,
@@ -10,25 +12,51 @@ const getters = {
 };
 
 const actions = {
-  async register({dispatch}, form) {
-    let UserForm = new FormData();
-    UserForm.append('username', form.username);
-    UserForm.append('password', form.password);
-    await axios.post('user', UserForm);
-    await dispatch('logIn', UserForm);
-  },
   async logIn({dispatch}, user) {
-    await axios.post('login', user);
-    await dispatch('viewMe');
+    await Auth.signIn({
+      username: user.username,
+      password: user.password,
+    })
+    dispatch('viewMe');
   },
   async viewMe({commit}) {
-    let {data} = await axios.get('user');
-    await commit('setUser', data);
+    try {
+      let {data} = await axios.get('user');
+      await commit('setUser', data);
+    } catch (error) {
+      if (error.response && error.response.status == 403) {
+        router.push('/user-not-confirmed');
+      } else {
+        Promise.reject(error);
+      }
+    }
   },
   async logOut({commit}) {
-    let user = null;
-    commit('logout', user);
-  }
+    await Auth.signOut();
+    await commit('logout', null);
+  },
+  async forgotPassword(_, username) {
+    await Auth.forgotPassword(username);
+  },
+  async resetPassword(_, user) {
+    await Auth.forgotPasswordSubmit(user.username, user.code, user.password);
+  },
+  async register(_, user) {
+    await Auth.signUp({
+      username: user.username,
+      password: user.password,
+      attributes: {
+        email: user.username,
+        'custom:request_details': user.request_details,
+      },
+    });
+  },
+  async sendConfirmationCode(_, username) {
+    await Auth.resendSignUp(username);
+  },
+  async verify(_, user) {
+    await Auth.confirmSignUp(user.username, user.code);
+  },
 };
 
 const mutations = {
