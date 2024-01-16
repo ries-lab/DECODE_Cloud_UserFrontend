@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '@/router';
 import { Auth } from '@aws-amplify/auth';
 
 const state = {
@@ -19,8 +20,16 @@ const actions = {
     dispatch('viewMe');
   },
   async viewMe({commit}) {
-    let {data} = await axios.get('user');
-    await commit('setUser', data);
+    try {
+      let {data} = await axios.get('user');
+      await commit('setUser', data);
+    } catch (error) {
+      if (error.response && error.response.status == 403) {
+        router.push('/user-not-confirmed');
+      } else {
+        Promise.reject(error);
+      }
+    }
   },
   async logOut({commit}) {
     await Auth.signOut();
@@ -29,7 +38,7 @@ const actions = {
   async forgotPassword(_, username) {
     await Auth.forgotPassword(username);
   },
-  async forgotPasswordSubmit(_, user) {
+  async resetPassword(_, user) {
     await Auth.forgotPasswordSubmit(user.username, user.code, user.password);
   },
   async register(_, user) {
@@ -38,8 +47,12 @@ const actions = {
       password: user.password,
       attributes: {
         email: user.username,
+        'custom:request_details': user.request_details,
       },
     });
+  },
+  async sendConfirmationCode(_, username) {
+    await Auth.resendSignUp(username);
   },
   async verify(_, user) {
     await Auth.confirmSignUp(user.username, user.code);

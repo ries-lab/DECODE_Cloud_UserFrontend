@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue';
 import RegisterView from '@/views/RegisterView.vue';
+import ConfirmEmailView from '@/views/ConfirmEmailView.vue';
+import UserNotConfirmedView from '@/views/UserNotConfirmedView.vue';
 import LoginView from '@/views/LoginView.vue';
 import ForgotPasswordView from '@/views/ForgotPasswordView.vue';
 import FilesView from '@/views/FilesView.vue';
@@ -20,7 +22,16 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: RegisterView,
-    props: true,
+  },
+  {
+    path: '/confirm-email/:username',
+    name: 'ConfirmEmail',
+    component: ConfirmEmailView,
+  },
+  {
+    path: '/user-not-confirmed',
+    name: 'UserNotConfirmed',
+    component: UserNotConfirmedView,
   },
   {
     path: '/login',

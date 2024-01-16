@@ -14,6 +14,10 @@
         <label for="password" class="form-label">New password:</label>
         <input type="password" name="password" v-model="form.password" class="form-control" />
       </div>
+      <div class="mb-3" v-if="isVerificationCodeSent">
+        <label for="repeat_password" class="form-label">Repeat new password:</label>
+        <input type="password" name="repeat_password" v-model="form.repeat_password" class="form-control" />
+      </div>
       <button type="submit" class="btn btn-primary" v-if="isVerificationCodeSent">Save</button>
       <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     </form>
@@ -32,6 +36,7 @@ export default defineComponent({
         username: '',
         code: '',
         password:'',
+        repeat_password: '',
       },
       errorMessage: '',
       isVerificationCodeSent: false,
@@ -40,7 +45,12 @@ export default defineComponent({
   methods: {
     ...mapActions(['forgotPassword', 'resetPassword', 'logIn']),
     async submit() {
+      if (this.form.password !== this.form.repeat_password) {
+        this.errorMessage = 'Passwords do not match';
+        return;
+      }
       try {
+        console.log("view", this.form.username, this.form.code, this.form.password)
         await this.resetPassword({'username': this.form.username, 'code': this.form.code, 'password': this.form.password});
         await this.logIn({'username': this.form.username, 'password': this.form.password});
         this.$router.push('/');

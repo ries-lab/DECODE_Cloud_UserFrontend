@@ -41,8 +41,7 @@ export default defineComponent({
         this.$router.push('/');
       } catch (error) {
         if (error.code === 'UserNotConfirmedException') {
-          console.log(this.form.username)
-          this.$router.push({name: 'Register', params: {user: this.form.username, emailVerification: true}});
+          this.$router.push('/confirm-email/' + this.form.username);
         } else {
           console.log(error);
           this.errorMessage = error;
