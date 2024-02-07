@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { apiClient } from './main.js';
 
 export default {
   name: 'Ping',
@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     getMessage() {
-      axios.get('/')
+      apiClient.get('/')
         .then((res) => {
           this.msg = res.data;
         })

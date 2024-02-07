@@ -8,11 +8,13 @@ import router from './router';
 import store from './store';
 
 const API_URL = process.env.API_URL || 'https://dev.decodeapi.arthur-jaques.de';
-axios.defaults.baseURL = API_URL;
+export const apiClient = axios.create({
+  baseURL: API_URL,
+});
 
 async function initializeApp() {
   try {
-    let response = await axios.get('/access_info');
+    let response = await apiClient.get('/access_info');
     let cognitoConfig = response.data.cognito;
     Amplify.configure({
       Auth: {
@@ -22,7 +24,7 @@ async function initializeApp() {
         authenticationFlowType: 'USER_PASSWORD_AUTH'
       }
     });
-    axios.interceptors.request.use(async (config) => {
+    apiClient.interceptors.request.use(async (config) => {
       try {
         const session = await Auth.currentSession();
         const token = session.getIdToken().getJwtToken();

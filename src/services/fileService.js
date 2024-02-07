@@ -1,16 +1,17 @@
 import axios from 'axios';
+import { apiClient } from '../main.js';
 import JSZip from 'jszip';
 
 export default {
     async getFiles(path) {
         path = path || '/';
-        return await axios.get(`/files/${path}?show_dirs=True&recursive=False`);
+        return await apiClient.get(`/files/${path}?show_dirs=True&recursive=False`);
     },
     async createFolder(path) {
-        return await axios.post(`/files/${path}/`);
+        return await apiClient.post(`/files/${path}/`);
     },
     async uploadFile(path, formData) {
-        let resp = await axios.post(`/files/${path}url`)
+        let resp = await apiClient.post(`/files/${path}url`)
         let data = new FormData();
         if ('key' in resp.data['data']) {
             data.append('key', resp.data['data']['key']);
@@ -26,20 +27,20 @@ export default {
         return await axios.post(resp.data.url, data, {headers: resp.data.headers || {}});
     },
     async deleteItem(path) {
-        return await axios.delete(`/files/${path}`);
+        return await apiClient.delete(`/files/${path}`);
     },
     async renameItem(path, newPath) {
-        return await axios.put(`/files/${path}`, {"path": newPath});
+        return await apiClient.put(`/files/${path}`, {"path": newPath});
     },
     async downloadFile(path) {
-        let resp = await axios.get(`/files/${path}/url`);
+        let resp = await apiClient.get(`/files/${path}/url`);
         return await axios.get(resp.data.url, {headers: resp.data.headers || {}});
     },
     async downloadItem(item) {
         const path = item.path;
         if (item.type === 'directory') {
             let zip = new JSZip();
-            let files = await axios.get(`/files/${path}`, {params: {show_dirs: false, recursive: true}});
+            let files = await apiClient.get(`/files/${path}`, {params: {show_dirs: false, recursive: true}});
             for (let file of files.data) {
                 let fileData = await this.downloadFile(file.path);
                 zip.file(file.path.replace(item.path, ''), fileData.data);

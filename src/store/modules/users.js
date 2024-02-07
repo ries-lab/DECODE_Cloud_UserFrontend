@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { apiClient } from '../../main.js';
 import router from '@/router';
 import { Auth } from '@aws-amplify/auth';
 
@@ -21,7 +21,7 @@ const actions = {
   },
   async viewMe({commit}) {
     try {
-      let {data} = await axios.get('user');
+      let {data} = await apiClient.get('user');
       await commit('setUser', data);
     } catch (error) {
       if (error.response && error.response.status == 403) {
