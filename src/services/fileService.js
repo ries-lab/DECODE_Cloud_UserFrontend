@@ -34,7 +34,7 @@ export default {
     },
     async downloadFile(path) {
         let resp = await apiClient.get(`/files/${path}/url`);
-        return await axios.get(resp.data.url, {headers: resp.data.headers || {}});
+        return await axios.get(resp.data.url, {headers: resp.data.headers || {}, responseType: 'arraybuffer'});
     },
     async downloadItem(item) {
         const path = item.path;
