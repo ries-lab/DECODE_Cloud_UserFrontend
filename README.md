@@ -1,6 +1,6 @@
 # DECODE_Cloud_UserFrontend
 
-Basic prototype of a web front-end for users of ![DECODE OpenCloud](https://github.com/ries-lab/DECODE_Cloud_Documentation) using Vue.js.  
+Basic prototype of a web front-end for users of [DECODE OpenCloud](https://github.com/ries-lab/DECODE_Cloud_Documentation) using Vue.js.  
 Developed without knowing any JavaScript/Vue/HTML/CSS by copy-pasting from a couple of projects and iterating with GitHub Copilot and ChatGPT, so quality might be lacking.
 
 
