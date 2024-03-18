@@ -48,9 +48,16 @@ export default defineComponent({
         return;
       }
       try {
-        await this.register({'username': this.form.username, 'password': this.form.password, 'request_details': this.form.request_details});
+        await this.register({
+          'username': this.form.username,
+          'password': this.form.password,
+          'request_details': this.form.request_details ? this.form.request_details : 'none'
+        });
         this.$router.push('/confirm-email/' + this.form.username);
       } catch (error) {
+        if (error.code === 'UserNotConfirmedException') {
+          this.$router.push('/confirm-email/' + this.form.username);
+        }
         console.log(error);
         this.errorMessage = error;
       }
