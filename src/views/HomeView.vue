@@ -16,12 +16,14 @@
             Under <router-link to="/files">Files</router-link> you can up- and download files.
             Navigate around the filesystem by double-clicking on folders and using the "Back" button.
             Alternatively, you can use the "Path" input field to jump to a specific location.
-            <br>
+          </p>
+          <p>
             You can create folders and upload files/folders using the corresponding buttons.
             You can rename them by clicking on the file/folder name.
             Please note that folder names must end with a "/".
             To download or delete a file/folder, click on the corresponding buttons next to the file name.
-            <br>
+          </p>
+          <p>
             The highest-level folder structure is fixed as follows:
             <ul>
               <li>"artifact/" contains job artifacts (e.g. trained ML models)</li>
@@ -44,20 +46,65 @@
         
         <section id="decode">
           <h3>Decode</h3>
+
+          DECODE is a deep learning tool for single molecule localization microscopy.
+          You can read more about it <a href="https://decode.readthedocs.io/en/release-0.10/index.html" target="_blank">here</a>.
           
           <section id="train">
             <h4>Train</h4>
-            <p>TODO</p>
+            <p>
+              To train a DECODE model, you need to provide a configuration file and a bead calibration file.
+              You can download example data <a href="https://oc.embl.de/index.php/s/KVQ77pmWG9WGVXO/download" target="_blank">here</a>.
+              Then:
+              <ol>
+                <li>Upload the input files (go to the <router-link to="/files">Files</router-link> tab)</li>
+                <ul>
+                  <li>The bead calibration file in a subfolder (e.g. "test_decode/") of "data/"</li>
+                  <li>The configuration file in a subfolder (e.g. "test_decode/") of "config/"</li>
+                </ul>
+                <li>Submit a new job (go to the <router-link to="/jobs">Jobs</router-link> tab)</li>
+                <ul>
+                  <li>Under "Job Name", enter a name for your job (e.g. "test_decode")</li>
+                  <li>Under "Application", select "decode" > "v0.10.1" > "train"</li>
+                  <li>Under "Input", select the folder containing the configuration file for "Configuration" and the folder containing the bead calibration file for "Bead Calibration"</li>
+                </ul>
+              </ol>
+              You should now see a new job in the list.
+              You can check its progress and details.
+              Once it finishes running, you will see the trained model under "artifact/job_name/", as well as the logs under "log/job_name/".
+              You can download them if you wish.
+            </p>
           </section>
           
           <section id="fit">
             <h4>Fit</h4>
-            <p>TODO</p>
+            <p>
+              Once you have a trained model, you can use it to fit your data.
+              You can download example data <a href="https://oc.embl.de/index.php/s/Xhsin2EfyoCREVM/download" target="_blank">here</a>.
+              Then:
+              <ol>
+                <li>Upload the input files (go to the <router-link to="/files">Files</router-link> tab)</li>
+                <ul>
+                  <li>The frame stack in a subfolder (e.g. "test_decode_fit") of "data/"</li>
+                  <li>The `meta.yaml` configuration in a subfolder (e.g. "test_decode_fit") of "data/"</li>
+                </ul>
+                <li>Submit a new job (go to the <router-link to="/jobs">Jobs</router-link> tab)</li>
+                <ul>
+                  <li>Under "Job Name", enter a name for your job (e.g. "test_decode_fit")</li>
+                  <li>Under "Application", select "decode" > "v0.10.1" > "fit"</li>
+                  <li>Under "Input", select the folder containing the `meta.yaml` for "Configuration", the folder containing the frame stack for "Data", and the folder containing the previously trained model (should be "test_decode/") for "Artifacts"</li>
+                </ul>
+              </ol>
+              When the job finishes, you will see the output predictions under "output/job_name/".
+            </p>
           </section>
         </section>
-      <p id="files">Click <router-link to="/files">here</router-link> to view your files.</p>
-      <p id="jobs">Click <router-link to="/jobs">here</router-link> to view your jobs.</p>
-      <p id="profile">Click <router-link to="/profile">here</router-link> to view your profile.</p>
+      </section>
+      <section id="how-to-use">
+        <h2>Technical documentation</h2>
+        <p>
+          If you are interested in how this all works behind the scenes, take a look at the <a href="https://github.com/ries-lab/DECODE_Cloud_Documentation" target="_blank">DECODE Cloud API documentation</a>.
+        </p>
       </section>
     </div>
 
@@ -83,3 +130,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+h2, h3, h4 {
+  margin-top: 20px;
+}
+</style>
