@@ -61,7 +61,7 @@
             <h4>Train</h4>
             <p>
               To train a DECODE model, you need to provide a configuration file and a bead calibration file.
-              You can download example data <a href="https://oc.embl.de/index.php/s/KVQ77pmWG9WGVXO/download" target="_blank">here</a>.
+              You can download example data <a href="https://oc.embl.de/index.php/s/Abn8nSMlOqvKeHC/download" target="_blank">here</a>.
               Then:
               <ol>
                 <li>Upload the input files (go to the <router-link to="/files">Files</router-link> tab)</li>
