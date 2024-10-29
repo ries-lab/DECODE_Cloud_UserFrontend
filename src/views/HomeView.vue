@@ -1,19 +1,26 @@
 <template>
   <section>
     <header>
-      <h1>Welcome to DECODE Cloud</h1>
+      <h1>Welcome to DECODE-OpenCloud</h1>
     </header>
 
-    <div v-if="isLoggedIn" id="logout">
-      
+    <div>
       <section id="how-to-use">
         <h2>How to Use</h2>
-        
+        <section id="register_login">
+          <h3>Registration and Login</h3>
+          <p>
+            Before using DECODE-OpenCloud, registration is required.
+            In addition, registration requires confirmation by an administrator, which might induce a small delay.
+            We apologize for this delay that is necessary to avoid abuse of our system.
+          </p>
+        </section>
+
         <!-- General Subsection -->
         <section id="general">
           <h3>General</h3>
           <p>
-            Under <router-link to="/files">Files</router-link> you can up- and download files.
+            At <router-link to="/files">Files</router-link> you can up- and download files.
             Navigate around the filesystem by double-clicking on folders and using the "Back" button.
             Alternatively, you can use the "Path" input field to jump to a specific location.
           </p>
@@ -24,7 +31,7 @@
             To download or delete a file/folder, click on the corresponding buttons next to the file name.
           </p>
           <p>
-            The highest-level folder structure is fixed as follows:
+            The top-level folder structure is fixed as follows:
             <ul>
               <li>"artifact/" contains job artifacts (e.g. trained ML models)</li>
               <li>"config/" contains configuration files (e.g. hyperparameters). A job will get all the configuration from a single folder.</li>
@@ -43,13 +50,13 @@
             Under the <router-link to="/profile">Profile</router-link> tab, you can view your profile.
           </p>
         </section>
-        
+
         <section id="decode">
           <h3>Decode</h3>
 
           DECODE is a deep learning tool for single molecule localization microscopy.
           You can read more about it <a href="https://decode.readthedocs.io/en/release-0.10/index.html" target="_blank">here</a>.
-          
+
           <section id="train">
             <h4>Train</h4>
             <p>
@@ -75,7 +82,7 @@
               You can download them if you wish.
             </p>
           </section>
-          
+
           <section id="fit">
             <h4>Fit</h4>
             <p>
@@ -107,15 +114,6 @@
         </p>
       </section>
     </div>
-
-    <p v-else>
-      <span><router-link to="/register">Register</router-link></span>
-      <span> or </span>
-      <span><router-link to="/login">Log In</router-link></span>
-      Please note that registration requires confirmation by an administrator, so you will not be able to use DECODE Cloud immediately.
-      We apologize for this delay that is necessary to avoid abuse of the system and thank you for your understanding.
-    </p>
-
   </section>
 </template>
 <script>
