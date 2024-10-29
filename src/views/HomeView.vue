@@ -52,7 +52,7 @@
         </section>
 
         <section id="decode">
-          <h3>Decode</h3>
+          <h3>DECODE</h3>
 
           DECODE is a deep learning tool for single molecule localization microscopy.
           You can read more about it <a href="https://decode.readthedocs.io/en/release-0.10/index.html" target="_blank">here</a>.
@@ -73,7 +73,7 @@
                 <ul>
                   <li>Under "Job Name", enter a name for your job (e.g. "test_decode")</li>
                   <li>Under "Application", select "decode" > "v0.10.1" > "train"</li>
-                  <li>Under "Input", select the folder containing the configuration file for "Configuration" and the folder containing the bead calibration file for "Bead Calibration"</li>
+                  <li>Under "Input", select the folder containing the configuration file for "Configuration" and the folder containing the bead calibration file for "Data"</li>
                 </ul>
               </ol>
               You should now see a new job in the list.
@@ -105,6 +105,46 @@
               When the job finishes, you will see the output predictions under "output/job_name/".
             </p>
           </section>
+        </section>
+        <section id="decode">
+          <h3>COMET</h3>
+          <p>
+            COMET is a software for drift correction single molecule localization microscopy.
+            You can read more about it <a href="https://github.com/gpufit/Comet" target="_blank">here</a>.
+            Comet already provides a website to run the software on the developers' servers (see <a href="https://www.smlm.tools/" target="_blank">here</a>);
+            We added it to DECODE-OpenCloud as a proof of concept to show how to integrate other software.
+          </p>
+          <p>
+            To run COMET, you need to specify some input parameters and provide a ".csv" dataset.
+            You can download example data provided by COMET's developers <a href="https://github.com/gpufit/Comet/blob/master/test_dataset/test_dataset.csv" target="_blank">here</a>.
+            For DECODE-OpenCloud, you will need to specify the input parameters in a configuration file.
+            For the example data linked above, such a configuration file (e.g. "test_dataset.yaml") will look something like:
+            <pre>
+              {
+                "dataset_dimension": 2,
+                "segmentation_method": "time",
+                "segmentation_parameter": 200,
+                "max_drift_nm": 300,
+                "initial_gaussian_scale_nm": 30,
+              }
+            </pre>
+            To run COMET:
+            <ol>
+              <li>Upload the input files (go to the <router-link to="/files">Files</router-link> tab)</li>
+              <ul>
+                <li>The ".csv" dataset file in a subfolder (e.g. "test_comet/") of "data/"</li>
+                <li>The ".yaml" configuration file in a subfolder (e.g. "test_comet/") of "config/"</li>
+              </ul>
+              <li>Submit a new job (go to the <router-link to="/jobs">Jobs</router-link> tab)</li>
+              <ul>
+                <li>Under "Job Name", enter a name for your job (e.g. "test_comet")</li>
+                <li>Under "Application", select "comet" > "latest" > "run"</li>
+                <li>Under "Input", select the folder containing the ".yaml" file for "Configuration" and the folder containing the ".csv" file for "Data"</li>
+              </ul>
+            </ol>
+            Once it finishes running, you will see the drift estimates under "output/job_name/".
+            You can download them if you wish.
+          </p>
         </section>
       </section>
       <section id="how-to-use">
