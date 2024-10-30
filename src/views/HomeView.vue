@@ -93,7 +93,7 @@
                 <li>Upload the input files (go to the <router-link to="/files">Files</router-link> tab)</li>
                 <ul>
                   <li>The frame stack in a subfolder (e.g. "test_decode_fit") of "data/"</li>
-                  <li>The `meta.yaml` configuration in a subfolder (e.g. "test_decode_fit") of "data/"</li>
+                  <li>The `meta.yaml` configuration in a subfolder (e.g. "test_decode_fit") of "config/"</li>
                 </ul>
                 <li>Submit a new job (go to the <router-link to="/jobs">Jobs</router-link> tab)</li>
                 <ul>
@@ -116,12 +116,12 @@
           </p>
           <p>
             To run COMET, you need to specify some input parameters and provide a ".csv" dataset.
-            You can download example data provided by COMET's developers <a href="https://github.com/gpufit/Comet/blob/master/test_dataset/test_dataset.csv" target="_blank">here</a>.
+            You can download example data provided by COMET's developers <a href="https://github.com/gpufit/Comet/blob/master/test_dataset/test_dataset_3D.csv" target="_blank">here</a>.
             For DECODE-OpenCloud, you will need to specify the input parameters in a configuration file.
             For the example data linked above, such a configuration file (e.g. "test_dataset.yaml") will look something like:
             <pre>
               {
-                "dataset_dimension": 2,
+                "dataset_dimension": 3,
                 "segmentation_method": "time",
                 "segmentation_parameter": 200,
                 "max_drift_nm": 300,
