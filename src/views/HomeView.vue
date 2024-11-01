@@ -102,7 +102,7 @@
                   <li>Under "Input", select the folder containing the `meta.yaml` for "Configuration", the folder containing the frame stack for "Data", and the folder containing the previously trained model (should be "test_decode/") for "Artifacts"</li>
                 </ul>
               </ol>
-              When the job finishes, you will see the output predictions under "output/job_name/".
+              When the job finishes, you will see the output predictions under "artifact/job_name/".
             </p>
           </section>
         </section>
