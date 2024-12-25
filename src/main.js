@@ -7,7 +7,7 @@ import { Amplify, Auth } from 'aws-amplify';
 import router from './router';
 import store from './store';
 
-const API_URL = process.env.API_URL || 'https://prod.api.decode.arthur-jaques.de';
+const API_URL = process.env.VUE_APP_API_URL || 'https://prod.api.decode.arthur-jaques.de';
 export const apiClient = axios.create({
   baseURL: API_URL,
 });
