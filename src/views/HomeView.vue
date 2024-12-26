@@ -147,11 +147,25 @@
           </p>
         </section>
       </section>
-      <section id="how-to-use">
-        <h2>Technical documentation</h2>
-        <p>
-          If you are interested in how this all works behind the scenes, take a look at the <a href="https://github.com/ries-lab/DECODE_Cloud_Documentation" target="_blank">DECODE Cloud API documentation</a>.
-        </p>
+      <section id="contributing">
+        <h2>Contributing</h2>
+          <section id="adding-workers">
+            <h3>Adding workers</h3>
+            <p>
+              If you are interested in contributing to DECODE-OpenCloud, you can add workers to the system.
+              Workers are the machines that run the jobs.
+              Our idea is to have a pool of workers that can be dynamically added and removed.
+              In a give-and-take fashion, you can provide workers when you have unused resources and use workers when you need more resources.
+              To add a worker, refer to the <a href="https://ries-lab.github.io/DECODE_Cloud_Documentation/#attaching-compute-power" target="_blank">technical documentation</a>.
+            </p>
+          </section>
+          <section id="developing">
+            <h3>Developing</h3>
+            <p>
+              If you are interested in helping us develop DECODE OpenCloud please contact us.
+              You can get an idea of how it works by looking at the <a href="https://ries-lab.github.io/DECODE_Cloud_Documentation" target="_blank">technical documentation</a>.
+            </p>
+          </section>
       </section>
     </div>
   </section>
