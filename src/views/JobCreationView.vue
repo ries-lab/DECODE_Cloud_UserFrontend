@@ -69,7 +69,7 @@
             <option disabled value="">Select environment</option>
             <option value="cloud">cloud</option>
             <option value="local">local</option>
-            <option value=null>any</option>
+            <option :value="null">any</option>
             </select>
         </div>
         <div class="sub-group">
@@ -152,9 +152,13 @@
             },
             async fetchInputFiles() {
                 const response_cfg = await fileService.getFiles("config/");
-                this.configFiles = response_cfg.data.map(file => file.path.replace('config/', ''));
+                this.configFiles = response_cfg.data
+                    .filter(file => file.type === 'directory')
+                    .map(file => file.path.replace('config/', ''));
                 const response_data = await fileService.getFiles("data/");
-                this.dataFiles = response_data.data.map(file => file.path.replace('data/', ''));
+                this.dataFiles = response_data.data
+                    .filter(file => file.type === 'directory')
+                    .map(file => file.path.replace('data/', ''));
                 const response_art = await fileService.getFiles("artifact/");
                 this.artifactFiles = response_art.data.map(file => file.path.replace('artifact/', ''));
             },

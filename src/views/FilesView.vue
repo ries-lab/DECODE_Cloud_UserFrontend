@@ -78,14 +78,13 @@ export default defineComponent({
       }
       this.fetchFiles();
     },
-    createFolder() {
-      fileService.createFolder(this.path + 'new')
-        .then(() => {
-          this.fetchFiles();
-        })
-        .catch(error => {
-          this.errorMessage = "Error creating folder: " + error.message;
-        });
+    async createFolder() {
+      try {
+        await fileService.createFolder(this.path + 'new');
+        await this.fetchFiles(); // Wait for the files to be fetched before continuing
+      } catch (error) {
+        this.errorMessage = "Error creating folder: " + error.message;
+      }
     },
     uploadSingleFile() {
       document.getElementById('fileInput').click();
@@ -134,6 +133,12 @@ export default defineComponent({
         });
     },
     renameItem(path, newName) {
+      // Check if the original item is a directory and ensure the new name has trailing slash
+      const originalItem = this.files.find(file => file.path === path);
+      if (originalItem && originalItem.type === 'directory' && !newName.endsWith('/')) {
+        newName += '/';
+      }
+      
       let newPath = this.path.trimEnd("/") + '/' + newName;
       fileService.renameItem(path, newPath)
         .then(() => {
