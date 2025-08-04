@@ -47,6 +47,16 @@ async function initializeApp() {
     const app = createApp(App);
     app.use(router);
     app.use(store);
+    
+    // Check if user is already authenticated on app startup
+    try {
+      await Auth.currentAuthenticatedUser();
+      await store.dispatch('viewMe');
+    } catch (error) {
+      // User is not authenticated, this is fine
+      console.log('No authenticated user found on startup');
+    }
+    
     app.mount("#app");
   } catch (error) {
     console.error("Error during app initialization:", error);

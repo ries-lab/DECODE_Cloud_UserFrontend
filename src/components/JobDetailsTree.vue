@@ -4,10 +4,10 @@
       <!-- Check if value is an object to decide on recursive rendering -->
       <div v-if="isObject(value)" @click="toggle(key)" class="tree-item-label">
         <span class="toggle-icon">{{ isExpanded(key) ? '-' : '+' }}</span>
-        <strong>{{ key }}:</strong>
+        <strong>{{ prettifyKey(key) }}:</strong>
       </div>
       <div v-else class="tree-item-row">
-        <strong>{{ key }}:</strong>
+        <strong>{{ prettifyKey(key) }}:</strong>
         <div class="tree-item-value">{{ value }}</div>
       </div>
       <!-- Recursive call for object values -->
@@ -38,6 +38,14 @@
       },
       isExpanded(key) {
         return !!this.expandedNodes[key];
+      },
+      prettifyKey(key) {
+        // Convert snake_case and camelCase to human readable format
+        return key
+          .replace(/([A-Z])/g, ' $1') // Insert space before capital letters
+          .replace(/_/g, ' ') // Replace underscores with spaces
+          .replace(/\b\w/g, l => l.toUpperCase()) // Capitalize first letter of each word
+          .trim();
       },
     },
   };

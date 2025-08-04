@@ -12,10 +12,10 @@
               <router-link class="nav-link" to="/">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/files">Files</router-link>
+              <a class="nav-link" @click="goToFiles">Files</a>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/jobs">Jobs</router-link>
+              <a class="nav-link" @click="goToJobs">Jobs</a>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/profile">Profile</router-link>
@@ -56,6 +56,22 @@ export default defineComponent({
     async logout () {
       await this.$store.dispatch('logOut');
       this.$router.push('/login');
+    },
+    goToFiles() {
+      // Force reload the Files page by navigating away and back
+      if (this.$route.path === '/files') {
+        window.location.reload();
+      } else {
+        this.$router.push('/files');
+      }
+    },
+    goToJobs() {
+      // Force reload the Jobs page by navigating away and back
+      if (this.$route.path === '/jobs') {
+        window.location.reload();
+      } else {
+        this.$router.push('/jobs');
+      }
     }
   },
 });
